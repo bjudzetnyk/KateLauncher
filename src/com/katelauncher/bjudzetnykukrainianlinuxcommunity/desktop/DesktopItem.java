@@ -1,4 +1,4 @@
-package com.gnome.launcher.desktop;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.desktop;
 
 public final class DesktopItem {
     public final String key;

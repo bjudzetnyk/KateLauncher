@@ -1,11 +1,11 @@
-package com.gnome.launcher.wallpaper;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.wallpaper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
 import android.net.Uri;
 
-import com.gnome.launcher.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
 
 import java.io.File;
 import java.io.FileOutputStream;

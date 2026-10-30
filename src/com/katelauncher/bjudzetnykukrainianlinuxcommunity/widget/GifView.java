@@ -1,4 +1,4 @@
-package com.gnome.launcher.widget;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;

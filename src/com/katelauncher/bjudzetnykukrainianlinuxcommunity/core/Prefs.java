@@ -1,4 +1,4 @@
-package com.gnome.launcher.core;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.core;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -53,7 +53,7 @@ public final class Prefs {
     private static SharedPreferences sp;
 
     public static void init(Context c) {
-        if (sp == null) sp = c.getApplicationContext().getSharedPreferences("gnome_launcher", Context.MODE_PRIVATE);
+        if (sp == null) sp = c.getApplicationContext().getSharedPreferences("kate_launcher", Context.MODE_PRIVATE);
     }
 
     public static boolean getBool(String k, boolean d) { return sp.getBoolean(k, d); }

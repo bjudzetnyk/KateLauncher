@@ -1,10 +1,10 @@
-package com.gnome.launcher.desktop;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.desktop;
 
 import android.text.TextUtils;
 
-import com.gnome.launcher.apps.AppEntry;
-import com.gnome.launcher.core.Config;
-import com.gnome.launcher.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppEntry;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Config;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.gnome.launcher.dock;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock;
 
 /** Швидкість свайпу по raw-координаті (View рухається, тому VelocityTracker не підходить). */
 final class SwipeTracker {

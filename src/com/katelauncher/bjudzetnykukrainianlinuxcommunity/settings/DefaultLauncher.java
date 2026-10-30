@@ -1,4 +1,4 @@
-package com.gnome.launcher.settings;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.settings;
 
 import android.app.role.RoleManager;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.provider.Settings;
 import android.view.View;
 
-import com.gnome.launcher.i18n.I18n;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.I18n;
 
 final class DefaultLauncher {
     private DefaultLauncher() {}

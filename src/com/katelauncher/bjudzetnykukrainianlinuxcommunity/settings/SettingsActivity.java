@@ -1,4 +1,4 @@
-package com.gnome.launcher.settings;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.settings;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,9 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.gnome.launcher.core.SystemUi;
-import com.gnome.launcher.core.Ui;
-import com.gnome.launcher.i18n.I18n;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.SystemUi;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.I18n;
 
 /**
  * Налаштування в стилі «Параметрів» Ubuntu.
@@ -195,12 +195,12 @@ public class SettingsActivity extends Activity {
 
     @Override protected void onResume() {
         super.onResume();
-        com.gnome.launcher.dock.DockOverlayService.setSuppressed(true);
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock.DockOverlayService.setSuppressed(true);
         rebuild();
     }
 
     @Override protected void onPause() {
-        com.gnome.launcher.dock.DockOverlayService.setSuppressed(false);
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock.DockOverlayService.setSuppressed(false);
         super.onPause();
     }
 

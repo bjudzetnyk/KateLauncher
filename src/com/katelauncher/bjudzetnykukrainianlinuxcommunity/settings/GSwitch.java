@@ -1,4 +1,4 @@
-package com.gnome.launcher.settings;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.settings;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -8,8 +8,8 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.view.View;
 
-import com.gnome.launcher.core.Theme;
-import com.gnome.launcher.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
 
 /** Перемикач у вигляді таблетки, як у GNOME/Yaru. Кліки обробляє рядок, а не сам перемикач. */
 final class GSwitch extends View {

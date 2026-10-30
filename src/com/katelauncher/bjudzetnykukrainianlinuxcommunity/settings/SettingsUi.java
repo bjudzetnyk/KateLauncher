@@ -1,4 +1,4 @@
-package com.gnome.launcher.settings;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.settings;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -14,8 +14,8 @@ import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.gnome.launcher.core.Theme;
-import com.gnome.launcher.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
 
 /** Будівельні блоки інтерфейсу налаштувань у стилі Ubuntu (Yaru dark / libadwaita). */
 final class SettingsUi {

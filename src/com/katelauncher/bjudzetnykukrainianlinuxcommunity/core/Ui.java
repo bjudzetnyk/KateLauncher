@@ -1,4 +1,4 @@
-package com.gnome.launcher.core;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.core;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;

@@ -1,4 +1,4 @@
-package com.gnome.launcher.core;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.core;
 
 /** Кольори (спрощений стиль Ubuntu). ACCENT і DESKTOP_BG користувач може змінити в налаштуваннях. */
 public final class Theme {

@@ -1,4 +1,4 @@
-package com.gnome.launcher.core;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.core;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;

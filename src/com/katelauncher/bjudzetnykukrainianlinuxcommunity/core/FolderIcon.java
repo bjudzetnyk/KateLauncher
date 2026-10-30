@@ -1,4 +1,4 @@
-package com.gnome.launcher.core;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.core;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,9 +8,9 @@ import android.graphics.Path;
 import android.text.TextUtils;
 import android.util.LruCache;
 
-import com.gnome.launcher.apps.AppEntry;
-import com.gnome.launcher.apps.AppRepository;
-import com.gnome.launcher.apps.IconCache;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppEntry;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppRepository;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.IconCache;
 
 import java.util.ArrayList;
 import java.util.List;

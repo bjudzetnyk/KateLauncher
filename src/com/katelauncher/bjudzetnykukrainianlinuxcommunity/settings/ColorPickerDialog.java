@@ -1,4 +1,4 @@
-package com.gnome.launcher.settings;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.settings;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -12,12 +12,12 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gnome.launcher.core.Ui;
-import com.gnome.launcher.i18n.I18n;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.I18n;
 
 /**
  * Простий вибір кольору: сітка готових зразків + поле для довільного HEX-коду і жива
- * мініатюра. Кнопка «Скинути» повертає типовий колір Kate Launcher.
+ * мініатюра. Кнопка «Скинути» повертає типовий колір KateLauncher.
  */
 final class ColorPickerDialog {
     private ColorPickerDialog() {}

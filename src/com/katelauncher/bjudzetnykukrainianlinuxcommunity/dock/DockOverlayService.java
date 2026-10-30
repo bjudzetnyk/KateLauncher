@@ -1,4 +1,4 @@
-package com.gnome.launcher.dock;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -14,13 +14,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.gnome.launcher.apps.AppRepository;
-import com.gnome.launcher.core.Config;
-import com.gnome.launcher.core.HomeActivity;
-import com.gnome.launcher.core.Prefs;
-import com.gnome.launcher.core.Ui;
-import com.gnome.launcher.i18n.I18n;
-import com.gnome.launcher.settings.SettingsActivity;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppRepository;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Config;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.HomeActivity;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.I18n;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.settings.SettingsActivity;
 
 /** Док поверх усіх програм (режим «док поверх всіх програм»). У самому лаунчері показується звичайний док. */
 public class DockOverlayService extends Service {

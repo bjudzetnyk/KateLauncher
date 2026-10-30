@@ -1,4 +1,4 @@
-package com.gnome.launcher.i18n;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n;
 
 import android.content.Context;
 import android.database.Cursor;

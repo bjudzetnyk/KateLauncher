@@ -1,4 +1,4 @@
-package com.gnome.launcher.desktop;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.desktop;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,20 +13,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.gnome.launcher.apps.AppEntry;
-import com.gnome.launcher.apps.AppLauncher;
-import com.gnome.launcher.apps.AppRepository;
-import com.gnome.launcher.apps.IconCache;
-import com.gnome.launcher.core.Config;
-import com.gnome.launcher.core.FolderIcon;
-import com.gnome.launcher.core.FolderPopup;
-import com.gnome.launcher.core.FolderStore;
-import com.gnome.launcher.core.Prefs;
-import com.gnome.launcher.core.Theme;
-import com.gnome.launcher.core.Ui;
-import com.gnome.launcher.dock.DockStore;
-import com.gnome.launcher.i18n.I18n;
-import com.gnome.launcher.widget.WidgetStore;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppEntry;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppLauncher;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppRepository;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.IconCache;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Config;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.FolderIcon;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.FolderPopup;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.FolderStore;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock.DockStore;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.I18n;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.widget.WidgetStore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -210,7 +210,7 @@ public class DesktopView extends View {
                 boolean ok = o == null || o == dragItem;
                 int m = Ui.dp(getContext(), 4);
                 rect.set(cellLeft(hoverCol) + m, gT + hoverRow * cellH + m, cellLeft(hoverCol) + cellW - m, gT + (hoverRow + 1) * cellH - m);
-                fill.setColor(ok ? com.gnome.launcher.core.Theme.accentAlpha(0x44) : 0x33FF0000);
+                fill.setColor(ok ? com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme.accentAlpha(0x44) : 0x33FF0000);
                 c.drawRoundRect(rect, r, r, fill);
             }
             rect.set(dL + margin, dT + margin, getWidth() - dR - margin, dT + margin + zoneH);

@@ -1,4 +1,4 @@
-package com.gnome.launcher.core;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.core;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,25 +16,25 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.gnome.launcher.apps.AppEntry;
-import com.gnome.launcher.apps.AppLauncher;
-import com.gnome.launcher.apps.AppRepository;
-import com.gnome.launcher.apps.IconCache;
-import com.gnome.launcher.desktop.DesktopItem;
-import com.gnome.launcher.desktop.DesktopStore;
-import com.gnome.launcher.desktop.DesktopView;
-import com.gnome.launcher.dock.DockController;
-import com.gnome.launcher.dock.DockHandleView;
-import com.gnome.launcher.dock.DockOverlayService;
-import com.gnome.launcher.dock.DockSide;
-import com.gnome.launcher.dock.DockStore;
-import com.gnome.launcher.dock.DockView;
-import com.gnome.launcher.drawer.DrawerView;
-import com.gnome.launcher.i18n.I18n;
-import com.gnome.launcher.settings.SettingsActivity;
-import com.gnome.launcher.ui.MiniMenu;
-import com.gnome.launcher.widget.WidgetLayer;
-import com.gnome.launcher.wallpaper.WallpaperView;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppEntry;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppLauncher;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppRepository;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.IconCache;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.desktop.DesktopItem;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.desktop.DesktopStore;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.desktop.DesktopView;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock.DockController;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock.DockHandleView;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock.DockOverlayService;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock.DockSide;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock.DockStore;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock.DockView;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.drawer.DrawerView;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.I18n;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.settings.SettingsActivity;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.ui.MiniMenu;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.widget.WidgetLayer;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.wallpaper.WallpaperView;
 
 public class HomeActivity extends Activity implements DockView.Listener, DrawerView.Listener, DesktopView.Listener {
     private WallpaperView wallpaper;

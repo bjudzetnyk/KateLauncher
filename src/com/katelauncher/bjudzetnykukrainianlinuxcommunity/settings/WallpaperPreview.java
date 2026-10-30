@@ -1,4 +1,4 @@
-package com.gnome.launcher.settings;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.settings;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,9 +10,9 @@ import android.graphics.RectF;
 import android.util.Size;
 import android.view.View;
 
-import com.gnome.launcher.core.Theme;
-import com.gnome.launcher.core.Ui;
-import com.gnome.launcher.wallpaper.WallpaperStore;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.wallpaper.WallpaperStore;
 
 import java.io.File;
 

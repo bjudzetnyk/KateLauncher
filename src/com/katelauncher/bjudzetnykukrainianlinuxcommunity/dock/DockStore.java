@@ -1,8 +1,8 @@
-package com.gnome.launcher.dock;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock;
 
 import android.text.TextUtils;
 
-import com.gnome.launcher.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
 
 import java.util.ArrayList;
 import java.util.List;

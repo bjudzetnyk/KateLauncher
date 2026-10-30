@@ -1,11 +1,11 @@
-package com.gnome.launcher.core;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.core;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.EditText;
 
-import com.gnome.launcher.i18n.I18n;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.I18n;
 
 import java.util.ArrayList;
 import java.util.List;

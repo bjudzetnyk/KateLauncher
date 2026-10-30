@@ -1,10 +1,10 @@
-package com.gnome.launcher.dock;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.view.Gravity;
 
-import com.gnome.launcher.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
 
 /**
  * Налаштування положення дока. Для КОЖНОЇ орієнтації (книжкової й альбомної) є два незалежні вибори:

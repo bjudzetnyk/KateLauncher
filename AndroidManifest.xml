@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gnome.launcher">
+    package="com.katelauncher.bjudzetnykukrainianlinuxcommunity">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".settings.SettingsActivity" android:label="Kate Launcher" android:exported="true">
+        <activity android:name=".settings.SettingsActivity" android:label="KateLauncher" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

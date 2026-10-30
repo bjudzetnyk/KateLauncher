@@ -1,4 +1,4 @@
-package com.gnome.launcher.apps;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps;
 
 import android.content.Context;
 import android.content.Intent;

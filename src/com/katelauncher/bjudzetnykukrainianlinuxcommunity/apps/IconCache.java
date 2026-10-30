@@ -1,4 +1,4 @@
-package com.gnome.launcher.apps;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,7 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.LruCache;
 
-import com.gnome.launcher.core.Shapes;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Shapes;
 
 import java.util.ArrayList;
 import java.util.HashMap;

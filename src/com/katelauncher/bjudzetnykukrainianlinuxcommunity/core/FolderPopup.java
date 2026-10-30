@@ -1,4 +1,4 @@
-package com.gnome.launcher.core;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.core;
 
 import android.app.Activity;
 import android.content.ClipData;
@@ -23,10 +23,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gnome.launcher.apps.AppEntry;
-import com.gnome.launcher.apps.AppRepository;
-import com.gnome.launcher.apps.IconCache;
-import com.gnome.launcher.i18n.I18n;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppEntry;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppRepository;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.IconCache;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.I18n;
 
 import java.util.ArrayList;
 import java.util.List;

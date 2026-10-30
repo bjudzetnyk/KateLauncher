@@ -1,4 +1,4 @@
-package com.gnome.launcher.dock;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

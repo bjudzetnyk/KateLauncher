@@ -1,4 +1,4 @@
-package com.gnome.launcher.wallpaper;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.wallpaper;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -14,10 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gnome.launcher.core.SystemUi;
-import com.gnome.launcher.core.Theme;
-import com.gnome.launcher.core.Ui;
-import com.gnome.launcher.i18n.I18n;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.SystemUi;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.I18n;
 
 import java.io.File;
 import java.io.FileInputStream;

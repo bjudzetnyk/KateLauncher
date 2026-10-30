@@ -1,8 +1,8 @@
-package com.gnome.launcher.i18n;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n;
 
 import android.content.Context;
 
-import com.gnome.launcher.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
 
 import java.util.LinkedHashMap;
 import java.util.Locale;

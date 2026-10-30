@@ -1,4 +1,4 @@
-package com.gnome.launcher.drawer;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.drawer;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,18 +18,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gnome.launcher.apps.AppEntry;
-import com.gnome.launcher.apps.AppLauncher;
-import com.gnome.launcher.apps.AppRepository;
-import com.gnome.launcher.apps.IconCache;
-import com.gnome.launcher.core.FolderIcon;
-import com.gnome.launcher.core.FolderPopup;
-import com.gnome.launcher.core.FolderStore;
-import com.gnome.launcher.core.Prefs;
-import com.gnome.launcher.core.Theme;
-import com.gnome.launcher.core.Ui;
-import com.gnome.launcher.i18n.I18n;
-import com.gnome.launcher.ui.MiniMenu;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppEntry;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppLauncher;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppRepository;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.IconCache;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.FolderIcon;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.FolderPopup;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.FolderStore;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.I18n;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.ui.MiniMenu;
 
 import java.util.ArrayList;
 import java.util.List;

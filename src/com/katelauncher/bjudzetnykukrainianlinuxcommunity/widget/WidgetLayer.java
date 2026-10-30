@@ -1,4 +1,4 @@
-package com.gnome.launcher.widget;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.widget;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,12 +31,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gnome.launcher.core.Prefs;
-import com.gnome.launcher.core.Ui;
-import com.gnome.launcher.desktop.DesktopItem;
-import com.gnome.launcher.desktop.DesktopStore;
-import com.gnome.launcher.i18n.I18n;
-import com.gnome.launcher.ui.MiniMenu;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.desktop.DesktopItem;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.desktop.DesktopStore;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.I18n;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.ui.MiniMenu;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -512,11 +512,11 @@ public final class WidgetLayer extends FrameLayout {
         protected void onDraw(Canvas c) {
             float s = Ui.dp(getContext(), 2), w = getWidth(), h = getHeight(), rad = Ui.dp(getContext(), 13);
             p.setStyle(Paint.Style.FILL);
-            p.setColor(com.gnome.launcher.core.Theme.accentAlpha(0x22));
+            p.setColor(com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme.accentAlpha(0x22));
             c.drawRect(0, 0, w, h, p);
             p.setStyle(Paint.Style.STROKE);
             p.setStrokeWidth(s);
-            p.setColor(com.gnome.launcher.core.Theme.ACCENT);
+            p.setColor(com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme.ACCENT);
             r.set(s / 2, s / 2, w - s / 2, h - s / 2);
             c.drawRect(r, p);
             // видалення — вгорі справа
@@ -524,7 +524,7 @@ public final class WidgetLayer extends FrameLayout {
             p.setColor(0xFFD32F2F);
             c.drawCircle(w - zone / 2f, zone / 2f, rad, p);
             // розмір — внизу справа
-            p.setColor(com.gnome.launcher.core.Theme.ACCENT);
+            p.setColor(com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme.ACCENT);
             c.drawCircle(w - zone / 2f, h - zone / 2f, rad, p);
             // меню позиції — вгорі зліва
             p.setColor(0xFF4A4A4A);

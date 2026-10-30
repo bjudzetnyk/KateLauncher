@@ -1,4 +1,4 @@
-package com.gnome.launcher.settings;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.settings;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -14,23 +14,23 @@ import android.os.Process;
 import android.provider.Settings;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import com.gnome.launcher.dock.DockOverlayService;
-import com.gnome.launcher.dock.DockSide;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock.DockOverlayService;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock.DockSide;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gnome.launcher.core.Config;
-import com.gnome.launcher.core.Prefs;
-import com.gnome.launcher.core.SystemUi;
-import com.gnome.launcher.core.Theme;
-import com.gnome.launcher.core.Ui;
-import com.gnome.launcher.i18n.I18n;
-import com.gnome.launcher.i18n.LanguageRepository;
-import com.gnome.launcher.wallpaper.WallpaperCropActivity;
-import com.gnome.launcher.wallpaper.WallpaperStore;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Config;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.SystemUi;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.I18n;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.i18n.LanguageRepository;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.wallpaper.WallpaperCropActivity;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.wallpaper.WallpaperStore;
 
 /** Розділи налаштувань (як панелі в «Параметрах» Ubuntu) і їхній вміст. */
 final class Panels {
@@ -331,7 +331,7 @@ final class Panels {
     }
 
     private static void restart(Activity a) {
-        Intent home = new Intent(a, com.gnome.launcher.core.HomeActivity.class);
+        Intent home = new Intent(a, com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.HomeActivity.class);
         home.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pi = PendingIntent.getActivity(a, 77, home, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         AlarmManager am = (AlarmManager) a.getSystemService(Context.ALARM_SERVICE);

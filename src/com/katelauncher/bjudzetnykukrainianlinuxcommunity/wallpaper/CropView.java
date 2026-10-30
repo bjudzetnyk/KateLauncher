@@ -1,4 +1,4 @@
-package com.gnome.launcher.wallpaper;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.wallpaper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,7 +10,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
-import com.gnome.launcher.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
 
 /** Вікно обрізки: рухати одним пальцем, масштабувати двома. Рамка має пропорції екрана. */
 public class CropView extends View {

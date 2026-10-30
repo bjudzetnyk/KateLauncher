@@ -1,4 +1,4 @@
-package com.gnome.launcher.dock;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -6,10 +6,10 @@ import android.animation.ValueAnimator;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import com.gnome.launcher.core.Prefs;
-import com.gnome.launcher.desktop.DesktopView;
-import com.gnome.launcher.drawer.DrawerView;
-import com.gnome.launcher.widget.WidgetLayer;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.desktop.DesktopView;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.drawer.DrawerView;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.widget.WidgetLayer;
 
 public final class DockController {
     /** Для оверлею поверх програм: вікна дока й ручки додаються/прибираються за станом. */

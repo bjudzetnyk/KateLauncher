@@ -1,11 +1,11 @@
-package com.gnome.launcher.settings;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.settings;
 
 import android.content.Context;
 import android.net.Uri;
 
-import com.gnome.launcher.core.Prefs;
-import com.gnome.launcher.core.Theme;
-import com.gnome.launcher.wallpaper.WallpaperStore;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.wallpaper.WallpaperStore;
 
 import org.json.JSONObject;
 

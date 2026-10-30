@@ -1,4 +1,4 @@
-package com.gnome.launcher.dock;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.dock;
 
 import android.content.ClipData;
 import android.content.Context;
@@ -12,17 +12,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.gnome.launcher.apps.AppEntry;
-import com.gnome.launcher.apps.AppLauncher;
-import com.gnome.launcher.apps.AppRepository;
-import com.gnome.launcher.apps.IconCache;
-import com.gnome.launcher.core.Config;
-import com.gnome.launcher.core.FolderIcon;
-import com.gnome.launcher.core.FolderPopup;
-import com.gnome.launcher.core.FolderStore;
-import com.gnome.launcher.core.Prefs;
-import com.gnome.launcher.core.Theme;
-import com.gnome.launcher.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppEntry;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppLauncher;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.AppRepository;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.IconCache;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Config;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.FolderIcon;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.FolderPopup;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.FolderStore;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Prefs;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
 
 import java.util.ArrayList;
 import java.util.Collections;

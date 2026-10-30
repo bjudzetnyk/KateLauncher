@@ -1,4 +1,4 @@
-package com.gnome.launcher.ui;
+package com.katelauncher.bjudzetnykukrainianlinuxcommunity.ui;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -9,8 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.gnome.launcher.core.Theme;
-import com.gnome.launcher.core.Ui;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme;
+import com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui;
 
 /** Легке контекстне меню (PopupWindow). */
 public final class MiniMenu {
