@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SettingsTheme" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#FF242424</item>
+        <item name="android:colorAccent">#FFE95420</item>
+        <item name="android:statusBarColor">#FF2E2E2E</item>
+        <item name="android:navigationBarColor">#FF242424</item>
+    </style>
+
+    <style name="HomeTheme" parent="SettingsTheme">
+        <item name="android:windowBackground">#FF2C001E</item>
+        <item name="android:statusBarColor">#00000000</item>
+        <item name="android:navigationBarColor">#00000000</item>
+    </style>
+</resources>
