@@ -119,6 +119,32 @@ public class DesktopView extends View {
         invalidate();
     }
 
+    /** Прибирає значок за ключем (програму, що переїхала в папку). */
+    public void removeKey(String key) {
+        DesktopItem found = null;
+        for (DesktopItem it : items) if (it.key.equals(key)) { found = it; break; }
+        if (found == null) return;
+        items.remove(found);
+        DesktopStore.save(items);
+        reflow();
+        invalidate();
+    }
+
+    /** Підміняє значок програми значком нової папки в тій самій клітинці. */
+    public void replaceKey(String oldKey, String newKey) {
+        for (int i = 0; i < items.size(); i++) {
+            DesktopItem it = items.get(i);
+            if (!it.key.equals(oldKey)) continue;
+            items.set(i, new DesktopItem(newKey, it.col, it.row));
+            DesktopStore.save(items);
+            reflow();
+            invalidate();
+            return;
+        }
+        DesktopStore.addKey(newKey);
+        reload();
+    }
+
     public void setDock(float l, float t, float r, float b, boolean shift) {
         dL = l; dT = t; dR = r; dB = b;
         gL = shift ? l : 0; gT = shift ? t : 0; gR = shift ? r : 0; gB = shift ? b : 0;
@@ -294,7 +320,7 @@ public class DesktopView extends View {
         } else if (!FolderStore.isFolder(o.key) && !FolderStore.isFolder(dragItem.key)) {
             List<String> merged = new ArrayList<>();
             merged.add(o.key); merged.add(dragItem.key);
-            String id = FolderStore.create(I18n.t("folder_default_name"), merged);
+            String id = FolderStore.createPlaced(I18n.t("folder_default_name"), merged);
             items.remove(o);
             items.remove(dragItem);
             items.add(new DesktopItem(FolderStore.PREFIX + id, o.dc, o.dr));

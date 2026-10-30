@@ -81,7 +81,7 @@ final class Panels {
      * підставляється кодом автоматично і в самому тексті його можна не дублювати.
      */
     private static void about(SettingsActivity a, LinearLayout out) {
-        TextView title = Ui.text(a, "KateLauncher0.7.2", 21, Theme.ACCENT);
+        TextView title = Ui.text(a, "KateLauncher0.7.3", 21, Theme.ACCENT);
         title.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
         title.setPadding(Ui.dp(a, 6), Ui.dp(a, 4), Ui.dp(a, 6), Ui.dp(a, 12));
         out.addView(title);

@@ -19,7 +19,7 @@
     <application
         android:name=".core.App"
         android:icon="@drawable/ic_launcher"
-        android:label="KateLauncher0.7.2"
+        android:label="KateLauncher0.7.3"
         android:theme="@style/SettingsTheme"
         android:allowBackup="false"
         android:supportsRtl="true">

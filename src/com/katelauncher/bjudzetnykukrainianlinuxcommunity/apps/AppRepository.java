@@ -23,6 +23,10 @@ public final class AppRepository {
     private static volatile Map<String, AppEntry> byKey = new HashMap<>();
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
 
+    private static volatile boolean loaded;
+
+    public static boolean isLoaded() { return loaded; }
+
     public static List<AppEntry> all() { return apps; }
 
     public static AppEntry find(String key) { return byKey.get(key); }
@@ -50,6 +54,7 @@ public final class AppRepository {
                 });
                 apps = list;
                 byKey = map;
+                loaded = true;
                 if (done != null) MAIN.post(done);
             }
         }, "apps-loader").start();

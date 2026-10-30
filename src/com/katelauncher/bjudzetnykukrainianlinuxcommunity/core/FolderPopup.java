@@ -204,6 +204,7 @@ public final class FolderPopup {
         final EditText input = new EditText(c);
         FolderStore.Folder f = FolderStore.find(id);
         if (f != null) input.setText(f.name);
+        Ui.tintEdit(input);
         new AlertDialog.Builder(c, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                 .setTitle(I18n.t("folder_rename"))
                 .setView(input)

@@ -51,7 +51,8 @@ public class DrawerView extends FrameLayout {
     private final List<Object> filtered = new ArrayList<>();
     private String query = "";
     private Listener listener;
-    private int insL, insT, insR, insB;
+    private int insL, insT, insR, insB;     // від дока
+    private int sysL, sysT, sysR, sysB;     // від системних панелей (смуга стану / навігація / клавіатура)
 
     public DrawerView(Context c) {
         super(c);
@@ -66,6 +67,7 @@ public class DrawerView extends FrameLayout {
         search.setHintTextColor(Theme.TEXT_DIM);
         search.setTextColor(Theme.TEXT);
         search.setSingleLine(true);
+        search.setTextCursorDrawable(cursorDrawable(c));
         search.setBackground(Ui.rounded(c, Theme.SURFACE, 24));
         search.setPadding(Ui.dp(c, 20), Ui.dp(c, 10), Ui.dp(c, 20), Ui.dp(c, 10));
         search.addTextChangedListener(new TextWatcher() {
@@ -98,6 +100,13 @@ public class DrawerView extends FrameLayout {
         setInsets(0, 0, 0, 0);
     }
 
+    private static android.graphics.drawable.Drawable cursorDrawable(Context c) {
+        android.graphics.drawable.GradientDrawable g = new android.graphics.drawable.GradientDrawable();
+        g.setColor(Theme.ACCENT);
+        g.setSize(Math.max(2, Ui.dp(c, 2)), 0);
+        return g;
+    }
+
     public void setListener(Listener l) { listener = l; }
 
     public void setInsets(int l, int t, int r, int b) {
@@ -105,10 +114,15 @@ public class DrawerView extends FrameLayout {
         applyPadding();
     }
 
+    public void setSystemInsets(int l, int t, int r, int b) {
+        sysL = l; sysT = t; sysR = r; sysB = b;
+        applyPadding();
+    }
+
     private void applyPadding() {
         int p = Ui.dp(getContext(), 16);
-        top.setPadding(insL + p, insT + Ui.dp(getContext(), 20), insR + p, Ui.dp(getContext(), 8));
-        grid.setPadding(insL + p, p, insR + p, insB + p);
+        top.setPadding(sysL + insL + p, sysT + insT + Ui.dp(getContext(), 20), sysR + insR + p, Ui.dp(getContext(), 8));
+        grid.setPadding(sysL + insL + p, p, sysR + insR + p, sysB + insB + p);
     }
 
     public void applyPrefs() {
@@ -127,7 +141,7 @@ public class DrawerView extends FrameLayout {
         query = q;
         String needle = q.trim().toLowerCase(Locale.getDefault());
         filtered.clear();
-        List<FolderStore.Folder> folders = FolderStore.all();
+        List<FolderStore.Folder> folders = FolderStore.drawerFolders();
         java.util.Set<String> inFolders = new java.util.HashSet<>();
         for (FolderStore.Folder f : folders) inFolders.addAll(f.apps);
         for (FolderStore.Folder f : folders) {
@@ -163,6 +177,7 @@ public class DrawerView extends FrameLayout {
         final EditText input = new EditText(getContext());
         FolderStore.Folder f = FolderStore.find(id);
         if (f != null) input.setText(f.name);
+        Ui.tintEdit(input);
         new AlertDialog.Builder(getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                 .setTitle(I18n.t("folder_rename"))
                 .setView(input)

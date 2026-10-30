@@ -213,6 +213,7 @@ public class SettingsActivity extends Activity {
     @Override
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
+        if (BackupDialog.handles(req)) { BackupDialog.onResult(this, req, res, data); return; }
         ResultHandler h = handlers.get(req);
         handlers.remove(req);
         if (h != null) h.onResult(res, data);

@@ -32,6 +32,16 @@ public final class DockStore {
         return true;
     }
 
+    /** Підміняє ключ на тому ж місці (напр. програма -> нова папка). */
+    public static void replace(String oldKey, String newKey) {
+        List<String> l = list();
+        int i = l.indexOf(oldKey);
+        if (i < 0) { if (!l.contains(newKey)) l.add(newKey); }
+        else if (l.contains(newKey)) l.remove(i);
+        else l.set(i, newKey);
+        save(l);
+    }
+
     public static void remove(String key) {
         List<String> l = list();
         if (l.remove(key)) save(l);

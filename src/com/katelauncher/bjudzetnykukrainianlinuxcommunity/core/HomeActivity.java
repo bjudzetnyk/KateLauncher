@@ -12,6 +12,9 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
+import android.graphics.Insets;
+import android.graphics.drawable.ColorDrawable;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -45,6 +48,7 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
     private DockController dockCtl;
     private DockHandleView handle;
     private int dockW;
+    private FrameLayout rootView, lowLayer, highLayer;
 
     private final FolderPopup.Listener folderListener = new FolderPopup.Listener() {
         @Override public void onLaunch(AppEntry e) { AppLauncher.launch(HomeActivity.this, e); }
@@ -73,7 +77,15 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
         dockW = Ui.dp(this, Config.DOCK_WIDTH_DP);
         final int mp = ViewGroup.LayoutParams.MATCH_PARENT;
 
+        // Малюємо під системними панелями (смуга стану / навігація), щоб шпалери й колір фону
+        // були видні й під напівпрозорою навігаційною панеллю, а не типовий колір вікна.
+        getWindow().setDecorFitsSystemWindows(false);
+        getWindow().setNavigationBarContrastEnforced(false);
+        getWindow().setStatusBarContrastEnforced(false);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Theme.DESKTOP_BG));
+
         FrameLayout root = new FrameLayout(this);
+        rootView = root;
         wallpaper = new WallpaperView(this);
         desktop = new DesktopView(this);
         widgets = new WidgetLayer(this);
@@ -81,15 +93,34 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
         dock = new DockView(this);
         handle = new DockHandleView(this);
 
+        // Шар столу й шар дока мають відступи від системних панелей; шпалери — на весь екран.
+        lowLayer = new FrameLayout(this);
+        highLayer = new FrameLayout(this);
+        lowLayer.setClipToPadding(false); lowLayer.setClipChildren(false);
+        highLayer.setClipToPadding(false); highLayer.setClipChildren(false);
+
         root.addView(wallpaper, new FrameLayout.LayoutParams(mp, mp));
-        root.addView(desktop, new FrameLayout.LayoutParams(mp, mp));
-        root.addView(widgets, new FrameLayout.LayoutParams(mp, mp));
+        lowLayer.addView(desktop, new FrameLayout.LayoutParams(mp, mp));
+        lowLayer.addView(widgets, new FrameLayout.LayoutParams(mp, mp));
+        root.addView(lowLayer, new FrameLayout.LayoutParams(mp, mp));
         drawer.setVisibility(View.GONE);
         root.addView(drawer, new FrameLayout.LayoutParams(mp, mp));
-        root.addView(dock, new FrameLayout.LayoutParams(dockW, mp, Gravity.LEFT));
-        root.addView(handle, new FrameLayout.LayoutParams(
+        highLayer.addView(dock, new FrameLayout.LayoutParams(dockW, mp, Gravity.LEFT));
+        highLayer.addView(handle, new FrameLayout.LayoutParams(
                 Ui.dp(this, Config.HANDLE_W_DP), Ui.dp(this, Config.HANDLE_H_DP),
                 Gravity.LEFT | Gravity.CENTER_VERTICAL));
+        root.addView(highLayer, new FrameLayout.LayoutParams(mp, mp));
+
+        root.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+            @Override public WindowInsets onApplyWindowInsets(View v, WindowInsets in) {
+                Insets s = in.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
+                Insets ime = in.getInsets(WindowInsets.Type.ime());
+                lowLayer.setPadding(s.left, s.top, s.right, s.bottom);
+                highLayer.setPadding(s.left, s.top, s.right, s.bottom);
+                drawer.setSystemInsets(s.left, s.top, s.right, Math.max(s.bottom, ime.bottom));
+                return WindowInsets.CONSUMED;
+            }
+        });
 
         dockCtl = new DockController(dock, handle, desktop, widgets, drawer, dockW);
         dock.setController(dockCtl);
@@ -101,6 +132,7 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
         dockCtl.init(Prefs.getBool(Prefs.DOCK_HIDDEN, false));
 
         setContentView(root);
+        root.requestApplyInsets();
 
         IntentFilter f = new IntentFilter();
         f.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -164,6 +196,8 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
     protected void onResume() {
         super.onResume();
         SystemUi.apply(this);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Theme.DESKTOP_BG));
+        FolderStore.migrate();
         if (wallpaper.needsReload()) wallpaper.reload();
         wallpaper.resume();
         desktop.reload();
@@ -253,6 +287,7 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
         final EditText input = new EditText(this);
         FolderStore.Folder f = FolderStore.find(id);
         if (f != null) input.setText(f.name);
+        Ui.tintEdit(input);
         new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                 .setTitle(I18n.t("folder_rename"))
                 .setView(input)
@@ -267,24 +302,38 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
                 .show();
     }
 
+    /** Створює незалежну копію папки з меню програм і кладе її в док/на стіл. */
+    private boolean placeFolderCopy(String drawerFolderKey, boolean toDock) {
+        String id = FolderStore.copyToPlaced(FolderStore.idOf(drawerFolderKey));
+        if (id == null) return false;
+        String key = FolderStore.PREFIX + id;
+        boolean ok = toDock ? DockStore.add(key) : DesktopStore.addKey(key);
+        if (!ok) { FolderStore.delete(id); return false; }
+        if (toDock) dock.reload(); else desktop.reload();
+        return true;
+    }
+
     /** Спільне контекстне меню для елемента дока або робочого столу (програма чи папка). */
-    private void showKeyMenu(final String key, View anchor, int x, int y, String removeLabel, final Runnable onRemove) {
+    private void showKeyMenu(final String key, View anchor, int x, int y, final boolean fromDock, String removeLabel, final Runnable onRemove) {
         MiniMenu m = new MiniMenu(this);
+        final int loc = fromDock ? FolderStore.LOC_DOCK : FolderStore.LOC_DESKTOP;
         if (FolderStore.isFolder(key)) {
             final String id = FolderStore.idOf(key);
             m.add(I18n.t("folder_rename"), new Runnable() { @Override public void run() { renameFolderDialog(id); } });
-            m.add(I18n.t("menu_add_dock"), new Runnable() {
-                @Override public void run() {
-                    if (DockStore.add(key)) dock.reload();
-                    else Toast.makeText(HomeActivity.this, I18n.t("already_in_dock"), Toast.LENGTH_SHORT).show();
-                }
-            });
-            m.add(I18n.t("menu_add_desktop"), new Runnable() {
-                @Override public void run() {
-                    if (DesktopStore.addKey(key)) desktop.reload();
-                    else Toast.makeText(HomeActivity.this, I18n.t("desktop_full"), Toast.LENGTH_SHORT).show();
-                }
-            });
+            // копія в інше місце (сама папка переноситься перетягуванням)
+            if (fromDock) {
+                m.add(I18n.t("menu_add_desktop"), new Runnable() {
+                    @Override public void run() {
+                        if (!placeFolderCopy(key, false)) Toast.makeText(HomeActivity.this, I18n.t("desktop_full"), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                m.add(I18n.t("menu_add_dock"), new Runnable() {
+                    @Override public void run() {
+                        if (!placeFolderCopy(key, true)) Toast.makeText(HomeActivity.this, I18n.t("already_in_dock"), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
             m.add(I18n.t("folder_delete"), new Runnable() {
                 @Override public void run() { FolderStore.delete(id); desktop.reload(); dock.reload(); drawer.refresh(); }
             });
@@ -294,8 +343,18 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
                 m.add(I18n.t("menu_app_info"), new Runnable() { @Override public void run() { AppLauncher.openInfo(HomeActivity.this, e.pkg); } });
                 m.add(I18n.t("folder_add_to"), new Runnable() {
                     @Override public void run() {
-                        FolderChooser.choose(HomeActivity.this, key, new FolderChooser.Done() {
-                            @Override public void onDone() { desktop.reload(); dock.reload(); drawer.refresh(); }
+                        FolderChooser.choose(HomeActivity.this, key, loc, new FolderChooser.Done() {
+                            @Override public void onDone(String createdFolderKey) {
+                                // програма переїжджає в папку: значок програми замінюється папкою або зникає
+                                if (fromDock) {
+                                    if (createdFolderKey != null) DockStore.replace(key, createdFolderKey);
+                                    else DockStore.remove(key);
+                                } else {
+                                    if (createdFolderKey != null) desktop.replaceKey(key, createdFolderKey);
+                                    else desktop.removeKey(key);
+                                }
+                                desktop.reload(); dock.reload(); drawer.refresh();
+                            }
                         });
                     }
                 });
@@ -327,15 +386,22 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
         else if (side == DockSide.RIGHT) mx = dm.widthPixels - gap - Ui.dp(this, 240);
         else if (side == DockSide.TOP) my = gap;
         else my = my - Ui.dp(this, 240);
-        showKeyMenu(key, dock, mx, my, I18n.t("menu_remove_dock"), new Runnable() {
-            @Override public void run() { DockStore.remove(key); dock.reload(); }
+        showKeyMenu(key, dock, mx, my, true, I18n.t("menu_remove_dock"), new Runnable() {
+            @Override public void run() {
+                DockStore.remove(key);
+                if (FolderStore.isFolder(key)) FolderStore.gc();
+                dock.reload();
+            }
         });
     }
 
     @Override
     public void onItemMenu(final DesktopItem item, float rawX, float rawY) {
-        showKeyMenu(item.key, desktop, Math.round(rawX), Math.round(rawY), I18n.t("menu_remove_desktop"), new Runnable() {
-            @Override public void run() { desktop.removeItem(item); }
+        showKeyMenu(item.key, desktop, Math.round(rawX), Math.round(rawY), false, I18n.t("menu_remove_desktop"), new Runnable() {
+            @Override public void run() {
+                desktop.removeItem(item);
+                if (FolderStore.isFolder(item.key)) { FolderStore.gc(); desktop.reload(); }
+            }
         });
     }
 
@@ -355,8 +421,8 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
                 })
                 .add(I18n.t("folder_add_to"), new Runnable() {
                     @Override public void run() {
-                        FolderChooser.choose(HomeActivity.this, e.key, new FolderChooser.Done() {
-                            @Override public void onDone() { drawer.refresh(); }
+                        FolderChooser.choose(HomeActivity.this, e.key, FolderStore.LOC_DRAWER, new FolderChooser.Done() {
+                            @Override public void onDone(String createdFolderKey) { drawer.refresh(); }
                         });
                     }
                 })
@@ -378,14 +444,12 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
 
     @Override
     public void onFolderAddToDock(String folderKey) {
-        if (DockStore.add(folderKey)) dock.reload();
-        else Toast.makeText(this, I18n.t("already_in_dock"), Toast.LENGTH_SHORT).show();
+        if (!placeFolderCopy(folderKey, true)) Toast.makeText(this, I18n.t("already_in_dock"), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFolderAddToDesktop(String folderKey) {
-        if (DesktopStore.addKey(folderKey)) desktop.reload();
-        else Toast.makeText(this, I18n.t("desktop_full"), Toast.LENGTH_SHORT).show();
+        if (!placeFolderCopy(folderKey, false)) Toast.makeText(this, I18n.t("desktop_full"), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -411,5 +475,9 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
     public void onOpenFolder(String folderId) { FolderPopup.show(this, folderId, folderListener); }
 
     @Override
-    public void onDockChanged() { dock.reload(); }
+    public void onDockChanged() {
+        FolderStore.gc();
+        desktop.reload();
+        dock.reload();
+    }
 }

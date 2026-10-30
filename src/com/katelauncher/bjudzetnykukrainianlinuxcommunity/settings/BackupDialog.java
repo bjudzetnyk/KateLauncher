@@ -53,40 +53,65 @@ final class BackupDialog {
                 .show();
     }
 
+    static final int REQ_EXPORT = 9001, REQ_IMPORT = 9002;
+
+    // Вибір файлу — окрема системна активність; на планшетах з малою пам'яттю (або при повороті)
+    // SettingsActivity може перестворитися, поки відкрито вибір файлу. Тому результат обробляємо
+    // за фіксованим кодом запиту, а обрані розділи тримаємо у статичному полі, а не в замиканні
+    // на стару активність.
+    private static Set<String> pendingExport;
+
     private static void pickDestination(final SettingsActivity a, final Set<String> chosen) {
+        pendingExport = chosen;
         Intent i = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         i.addCategory(Intent.CATEGORY_OPENABLE);
         i.setType("application/zip");
         i.putExtra(Intent.EXTRA_TITLE, "KateLauncher_" + I18n.t("settings").toLowerCase() + ".klbackup");
-        a.startForResult(i, new SettingsActivity.ResultHandler() {
-            @Override public void onResult(int res, Intent data) {
-                if (res != android.app.Activity.RESULT_OK || data == null || data.getData() == null) return;
-                try {
-                    BackupManager.export(a, data.getData(), chosen);
-                    Toast.makeText(a, I18n.t("backup_exported"), Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    Toast.makeText(a, I18n.t("backup_failed"), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        a.startActivityForResult(i, REQ_EXPORT);
     }
 
     static void showImport(final SettingsActivity a) {
         Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         i.addCategory(Intent.CATEGORY_OPENABLE);
         i.setType("*/*");
-        a.startForResult(i, new SettingsActivity.ResultHandler() {
-            @Override public void onResult(int res, Intent data) {
-                if (res != android.app.Activity.RESULT_OK || data == null || data.getData() == null) return;
-                Uri uri = data.getData();
-                try {
-                    BackupManager.importFrom(a, uri);
-                    Toast.makeText(a, I18n.t("backup_imported"), Toast.LENGTH_SHORT).show();
-                    a.rebuild();
-                } catch (Exception e) {
-                    Toast.makeText(a, I18n.t("backup_failed"), Toast.LENGTH_LONG).show();
-                }
+        a.startActivityForResult(i, REQ_IMPORT);
+    }
+
+    static boolean handles(int req) { return req == REQ_EXPORT || req == REQ_IMPORT; }
+
+    private static String why(Throwable t) {
+        String m = t.getMessage();
+        String n = t.getClass().getSimpleName();
+        if (m != null && m.length() > 60) m = m.substring(0, 60);
+        return n + (m == null || m.isEmpty() ? "" : ": " + m);
+    }
+
+    static void onResult(final SettingsActivity a, int req, int res, Intent data) {
+        if (res != android.app.Activity.RESULT_OK || data == null || data.getData() == null) return;
+        Uri uri = data.getData();
+        if (req == REQ_EXPORT) {
+            Set<String> chosen = pendingExport;
+            if (chosen == null || chosen.isEmpty()) return;
+            try {
+                BackupManager.export(a, uri, chosen);
+                Toast.makeText(a, I18n.t("backup_exported"), Toast.LENGTH_SHORT).show();
+            } catch (Throwable e) {
+                Toast.makeText(a, I18n.t("backup_failed") + " (" + why(e) + ")", Toast.LENGTH_LONG).show();
+            } finally {
+                pendingExport = null;
             }
-        });
+            return;
+        }
+        boolean imported = false;
+        try {
+            BackupManager.importFrom(a, uri);
+            imported = true;
+        } catch (Throwable e) {
+            Toast.makeText(a, I18n.t("backup_failed") + " (" + why(e) + ")", Toast.LENGTH_LONG).show();
+        }
+        if (!imported) return;
+        Toast.makeText(a, I18n.t("backup_imported"), Toast.LENGTH_SHORT).show();
+        // Оновлення екрана налаштувань — окремо: збій перемальовування не має видаватися за збій імпорту.
+        try { a.rebuild(); } catch (Throwable ignored) {}
     }
 }

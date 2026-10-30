@@ -8,7 +8,8 @@
     </style>
 
     <style name="HomeTheme" parent="SettingsTheme">
-        <item name="android:windowBackground">#FF2C001E</item>
+        <item name="android:windowBackground">#FF000000</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">#00000000</item>
         <item name="android:navigationBarColor">#00000000</item>
     </style>

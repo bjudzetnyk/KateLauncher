@@ -128,37 +128,80 @@ final class BackupManager {
 
     // ---- Імпорт ----
 
+    /** Допустимі межі для числових налаштувань: чужий або пошкоджений файл не зламає лаунчер. */
+    private static int clampInt(String key, int v) {
+        switch (key) {
+            case "dock_icon_size": case "desktop_icon_size": case "drawer_icon_size": return Math.max(16, Math.min(160, v));
+            case "drawer_bg_alpha": return Math.max(0, Math.min(255, v));
+            case "orientation": return Math.max(0, Math.min(2, v));
+            case "dock_mode": return v == 1 ? 1 : 0;
+            case "dock_pos_port": case "dock_pos_land": return Math.max(0, Math.min(3, v));
+            case "dock_nav_port": case "dock_nav_land": return v == 0 ? 0 : 1;
+            default: return v;
+        }
+    }
+
+    private static Set<String> knownKeys() {
+        Set<String> s = new java.util.HashSet<>();
+        for (Category cat : CATEGORIES) for (String k : cat.keys) s.add(k);
+        return s;
+    }
+
+    private static boolean parseBool(String v) {
+        v = v.trim();
+        return "true".equalsIgnoreCase(v) || "1".equals(v);
+    }
+
     /** Повертає кількість застосованих ключів. Змінює лише те, що є у файлі. */
     static int importFrom(Context c, Uri src) throws Exception {
-        JSONObject prefs = null;
+        String json = null;
         byte[] wpCurrent = null, wpLand = null;
         try (InputStream raw = c.getContentResolver().openInputStream(src)) {
             if (raw == null) throw new IOException("no stream");
-            try (ZipInputStream zip = new ZipInputStream(raw)) {
+            try (ZipInputStream zip = new ZipInputStream(new java.io.BufferedInputStream(raw))) {
                 ZipEntry e;
                 while ((e = zip.getNextEntry()) != null) {
-                    if ("settings.json".equals(e.getName())) prefs = new JSONObject(readAll(zip));
-                    else if ("wp_current".equals(e.getName())) wpCurrent = readAllBytes(zip);
-                    else if ("wp_current_land".equals(e.getName())) wpLand = readAllBytes(zip);
+                    String n = e.getName();
+                    int slash = Math.max(n.lastIndexOf('/'), n.lastIndexOf('\\'));
+                    if (slash >= 0) n = n.substring(slash + 1);   // файл міг опинитися у підпапці архіву
+                    if (e.isDirectory()) continue;
+                    if ("settings.json".equals(n)) json = readAll(zip);
+                    else if ("wp_current".equals(n)) wpCurrent = readAllBytes(zip);
+                    else if ("wp_current_land".equals(n)) wpLand = readAllBytes(zip);
                 }
             }
         }
-        if (prefs == null) throw new IOException("не файл резервної копії");
+        if (json == null) throw new IOException("не файл резервної копії");
+        if (json.length() > 0 && json.charAt(0) == '\uFEFF') json = json.substring(1);   // BOM
+        JSONObject prefs = new JSONObject(json);
 
+        Set<String> known = knownKeys();
         int applied = 0;
         Iterator<String> it = prefs.keys();
         while (it.hasNext()) {
             String key = it.next();
-            if (Prefs.WIDGETS.equals(key) || Prefs.WIDGETS_LAND.equals(key) || Prefs.LANG.equals(key)) continue; // ніколи
+            if (!known.contains(key)) continue;   // віджети, мова та сторонні ключі ніколи не імпортуються
             String raw = prefs.optString(key, null);
-            if (raw == null || raw.length() < 2) continue;
-            char type = raw.charAt(0);
+            if (raw == null || raw.length() < 2 || raw.charAt(1) != ':') continue;
             String v = raw.substring(2);
+            // Тип беремо з нашої таблиці, а не з файлу, — інакше ключ міг би змінити тип у сховищі
+            // і пізніше викликати ClassCastException під час читання.
+            Character want = TYPES.get(key);
+            char type = want != null ? want : raw.charAt(0);
             try {
                 switch (type) {
-                    case T_BOOL: Prefs.putBool(key, Boolean.parseBoolean(v)); break;
-                    case T_INT: Prefs.putInt(key, Integer.parseInt(v)); break;
-                    case T_FLOAT: Prefs.putFloat(key, Float.parseFloat(v)); break;
+                    case T_BOOL: Prefs.putBool(key, parseBool(v)); break;
+                    case T_INT: {
+                        int n = (int) Long.parseLong(v.trim());
+                        Prefs.putInt(key, clampInt(key, n));
+                        break;
+                    }
+                    case T_FLOAT: {
+                        float f = Float.parseFloat(v.trim());
+                        if (Float.isNaN(f) || Float.isInfinite(f)) continue;
+                        Prefs.putFloat(key, f);
+                        break;
+                    }
                     default: Prefs.putString(key, v);
                 }
                 applied++;
@@ -168,6 +211,10 @@ final class BackupManager {
         if (wpLand != null) writeFile(WallpaperStore.current(c, true), wpLand);
         if (wpCurrent != null || wpLand != null) Prefs.putInt(Prefs.WP_VER, Prefs.getInt(Prefs.WP_VER, 0) + 1);
         Theme.init();
+        // копія з 0.7.2 і старіших: спільні папки столу/дока стають незалежними
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.FolderStore.migrate();
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.apps.IconCache.clear();
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.FolderIcon.clear();
         return applied;
     }
 
@@ -188,6 +235,9 @@ final class BackupManager {
     }
 
     private static void writeFile(File f, byte[] data) throws IOException {
-        try (OutputStream out = new FileOutputStream(f)) { out.write(data); }
+        File tmp = new File(f.getParentFile(), f.getName() + ".tmp");
+        try (OutputStream out = new FileOutputStream(tmp)) { out.write(data); }
+        if (f.exists() && !f.delete()) throw new IOException("cannot replace " + f.getName());
+        if (!tmp.renameTo(f)) throw new IOException("cannot write " + f.getName());
     }
 }

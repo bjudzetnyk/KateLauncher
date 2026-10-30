@@ -51,6 +51,7 @@ final class ColorPickerDialog {
         hex.setTextColor(0xFFFFFFFF);
         hex.setHintTextColor(0x80FFFFFF);
         hex.setGravity(Gravity.CENTER);
+        Ui.tintEdit(hex);
 
         final int[] value = {current};
         final Runnable updatePreview = new Runnable() {
@@ -60,7 +61,11 @@ final class ColorPickerDialog {
         GridLayout grid = new GridLayout(c);
         grid.setColumnCount(6);
         int sw = Ui.dp(c, 36), m = Ui.dp(c, 4);
-        for (final int preset : PRESETS) {
+        // перший зразок — стандартний відтінок (той самий, що й при першому запуску)
+        java.util.List<Integer> swatches = new java.util.ArrayList<>();
+        swatches.add(def & 0xFFFFFF);
+        for (int pr : PRESETS) if (!swatches.contains(pr)) swatches.add(pr);
+        for (final int preset : swatches) {
             View v = new View(c);
             GradientDrawable d = new GradientDrawable();
             d.setShape(GradientDrawable.OVAL);

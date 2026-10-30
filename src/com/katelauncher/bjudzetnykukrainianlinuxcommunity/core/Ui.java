@@ -31,6 +31,16 @@ public final class Ui {
         return s;
     }
 
+    /** Підсвічує підкреслення, курсор і виділення поля вводу кольором акценту (а не системним). */
+    public static void tintEdit(android.widget.EditText e) {
+        e.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Theme.ACCENT));
+        GradientDrawable cur = new GradientDrawable();
+        cur.setColor(Theme.ACCENT);
+        cur.setSize(Math.max(2, Math.round(2 * e.getResources().getDisplayMetrics().density)), 0);
+        e.setTextCursorDrawable(cur);
+        e.setHighlightColor((Theme.ACCENT & 0x00FFFFFF) | 0x55000000);
+    }
+
     public static TextView text(Context c, String s, float sizeSp, int color) {
         TextView t = new TextView(c);
         t.setText(s);

@@ -56,12 +56,14 @@ public final class Prefs {
         if (sp == null) sp = c.getApplicationContext().getSharedPreferences("kate_launcher", Context.MODE_PRIVATE);
     }
 
-    public static boolean getBool(String k, boolean d) { return sp.getBoolean(k, d); }
+    // Геттери не кидають ClassCastException, якщо ключ колись було збережено іншим типом
+    // (наприклад, після імпорту копії або оновлення зі старої версії) — повертають значення за замовчуванням.
+    public static boolean getBool(String k, boolean d) { try { return sp.getBoolean(k, d); } catch (ClassCastException e) { return d; } }
     public static void putBool(String k, boolean v) { sp.edit().putBoolean(k, v).apply(); }
-    public static int getInt(String k, int d) { return sp.getInt(k, d); }
+    public static int getInt(String k, int d) { try { return sp.getInt(k, d); } catch (ClassCastException e) { return d; } }
     public static void putInt(String k, int v) { sp.edit().putInt(k, v).apply(); }
-    public static float getFloat(String k, float d) { return sp.getFloat(k, d); }
+    public static float getFloat(String k, float d) { try { return sp.getFloat(k, d); } catch (ClassCastException e) { return d; } }
     public static void putFloat(String k, float v) { sp.edit().putFloat(k, v).apply(); }
-    public static String getString(String k, String d) { return sp.getString(k, d); }
+    public static String getString(String k, String d) { try { return sp.getString(k, d); } catch (ClassCastException e) { return d; } }
     public static void putString(String k, String v) { sp.edit().putString(k, v).apply(); }
 }

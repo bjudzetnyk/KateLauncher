@@ -11,5 +11,6 @@ public class App extends Application {
         Prefs.init(this);
         Theme.init();
         I18n.init(this);
+        FolderStore.migrate();
     }
 }

@@ -378,6 +378,7 @@ public final class WidgetLayer extends FrameLayout {
     private void askGifSize(final Activity a, final String fileName) {
         final EditText input = new EditText(a);
         input.setHint("3x2");
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Ui.tintEdit(input);
         new AlertDialog.Builder(a, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                 .setTitle(I18n.t("widget_gif_size"))
                 .setView(input)
