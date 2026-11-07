@@ -62,11 +62,17 @@ public final class IconCache {
 
     private static Bitmap render(Context app, AppEntry e, int px, String shape) {
         try {
-            Drawable d = app.getPackageManager().getActivityIcon(e.cn);
-            Bitmap raw = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888);
-            Canvas rc = new Canvas(raw);
-            d.setBounds(0, 0, px, px);
-            d.draw(rc);
+            Bitmap raw;
+            if (e.linux) {
+                raw = com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.LinuxIcons.load(app,
+                        com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.LinuxStore.app(e.cls), px);
+            } else {
+                Drawable d = app.getPackageManager().getActivityIcon(e.cn);
+                raw = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888);
+                Canvas rc = new Canvas(raw);
+                d.setBounds(0, 0, px, px);
+                d.draw(rc);
+            }
             if ("square".equals(shape)) return raw;
             Bitmap out = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888);
             Canvas oc = new Canvas(out);

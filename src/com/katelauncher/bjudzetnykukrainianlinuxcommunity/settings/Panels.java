@@ -39,7 +39,8 @@ final class Panels {
     enum Panel {
         ABOUT("about", "panel_about", SymbolView.INFO),
         SYSTEM("system", "panel_system", SymbolView.GEAR),
-        PERSONAL("personal", "panel_personal", SymbolView.APPEARANCE);
+        PERSONAL("personal", "panel_personal", SymbolView.APPEARANCE),
+        LINUX("linux", "panel_linux", SymbolView.TERMINAL);
 
         final String id, titleKey;
         final int symbol;
@@ -56,6 +57,7 @@ final class Panels {
     static void build(SettingsActivity a, Panel p, LinearLayout out) {
         if (p == Panel.ABOUT) about(a, out);
         else if (p == Panel.SYSTEM) system(a, out);
+        else if (p == Panel.LINUX) LinuxPanel.build(a, out);
         else personal(a, out);
     }
 
@@ -81,7 +83,7 @@ final class Panels {
      * підставляється кодом автоматично і в самому тексті його можна не дублювати.
      */
     private static void about(SettingsActivity a, LinearLayout out) {
-        TextView title = Ui.text(a, "KateLauncher0.7.3", 21, Theme.ACCENT);
+        TextView title = Ui.text(a, "KateLauncher0.8.0ExLE", 21, Theme.ACCENT);
         title.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
         title.setPadding(Ui.dp(a, 6), Ui.dp(a, 4), Ui.dp(a, 6), Ui.dp(a, 12));
         out.addView(title);

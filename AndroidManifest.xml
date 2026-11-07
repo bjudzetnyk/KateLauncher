@@ -5,8 +5,11 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- Запуск Linux-програм через Termux (потрібен також allow-external-apps=true у termux.properties) -->
+    <uses-permission android:name="com.termux.permission.RUN_COMMAND" />
 
     <queries>
+        <package android:name="com.termux" />
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -19,7 +22,8 @@
     <application
         android:name=".core.App"
         android:icon="@drawable/ic_launcher"
-        android:label="KateLauncher0.7.3"
+        android:label="KateLauncher0.8.0ExLE"
+        android:extractNativeLibs="false"
         android:theme="@style/SettingsTheme"
         android:allowBackup="false"
         android:supportsRtl="true">
@@ -46,6 +50,12 @@
         </activity>
         <activity android:name=".wallpaper.WallpaperCropActivity" android:exported="false" />
         <service android:name=".dock.DockOverlayService" android:exported="false" />
+        <!-- Приймає Binder композитора з Termux (перевіряється токен). Не служба. -->
+        <receiver android:name=".linux.wl.HostReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.katelauncher.bjudzetnykukrainianlinuxcommunity.WL_HOST" />
+            </intent-filter>
+        </receiver>
         <receiver android:name=".dock.BootReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
