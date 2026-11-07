@@ -52,6 +52,13 @@ public final class DesktopStore {
         return false;
     }
 
+    public static void removeKey(String key) {
+        List<DesktopItem> items = load();
+        List<DesktopItem> keep = new ArrayList<>();
+        for (DesktopItem it : items) if (!it.key.equals(key)) keep.add(it);
+        if (keep.size() != items.size()) save(keep);
+    }
+
     public static void removePackage(String pkg) {
         List<DesktopItem> items = load();
         List<DesktopItem> keep = new ArrayList<>();

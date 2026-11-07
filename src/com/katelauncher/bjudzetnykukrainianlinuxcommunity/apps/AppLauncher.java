@@ -9,6 +9,7 @@ public final class AppLauncher {
     private AppLauncher() {}
 
     public static void launch(Context c, AppEntry e) {
+        if (e.linux) { com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.LinuxLauncher.launch(c, e); return; }
         Intent i = new Intent(Intent.ACTION_MAIN);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
         i.setComponent(e.cn);

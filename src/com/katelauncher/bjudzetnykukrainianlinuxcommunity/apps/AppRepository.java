@@ -31,6 +31,25 @@ public final class AppRepository {
 
     public static AppEntry find(String key) { return byKey.get(key); }
 
+    private static volatile List<AppEntry> androidApps = new ArrayList<>();
+
+    /** Перебудовує загальний список із системних програм і Linux-програм (без повторного опитування PackageManager). */
+    public static void syncLinux() {
+        List<AppEntry> list = new ArrayList<>(androidApps);
+        Map<String, AppEntry> map = new HashMap<>();
+        for (AppEntry e : list) map.put(e.key, e);
+        for (AppEntry e : com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.LinuxApps.entries()) { list.add(e); map.put(e.key, e); }
+        sort(list);
+        apps = list; byKey = map;
+    }
+
+    private static void sort(List<AppEntry> list) {
+        final Collator col = Collator.getInstance();
+        Collections.sort(list, new java.util.Comparator<AppEntry>() {
+            @Override public int compare(AppEntry a, AppEntry b) { return col.compare(a.label, b.label); }
+        });
+    }
+
     public static void refresh(Context ctx, final Runnable done) {
         final Context app = ctx.getApplicationContext();
         new Thread(new Runnable() {
@@ -48,10 +67,10 @@ public final class AppRepository {
                     list.add(e);
                     map.put(e.key, e);
                 }
-                final Collator col = Collator.getInstance();
-                Collections.sort(list, new java.util.Comparator<AppEntry>() {
-                    @Override public int compare(AppEntry a, AppEntry b) { return col.compare(a.label, b.label); }
-                });
+                sort(list);
+                androidApps = new ArrayList<>(list);
+                for (AppEntry e : com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.LinuxApps.entries()) { list.add(e); map.put(e.key, e); }
+                sort(list);
                 apps = list;
                 byKey = map;
                 loaded = true;

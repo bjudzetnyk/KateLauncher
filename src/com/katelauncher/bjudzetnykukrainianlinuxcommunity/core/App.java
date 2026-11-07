@@ -12,5 +12,6 @@ public class App extends Application {
         Theme.init();
         I18n.init(this);
         FolderStore.migrate();
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.init(this);
     }
 }

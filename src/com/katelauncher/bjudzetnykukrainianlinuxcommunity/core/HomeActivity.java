@@ -48,7 +48,7 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
     private DockController dockCtl;
     private DockHandleView handle;
     private int dockW;
-    private FrameLayout rootView, lowLayer, highLayer;
+    private FrameLayout rootView, lowLayer, highLayer, linuxLayer;
 
     private final FolderPopup.Listener folderListener = new FolderPopup.Listener() {
         @Override public void onLaunch(AppEntry e) { AppLauncher.launch(HomeActivity.this, e); }
@@ -103,6 +103,10 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
         lowLayer.addView(desktop, new FrameLayout.LayoutParams(mp, mp));
         lowLayer.addView(widgets, new FrameLayout.LayoutParams(mp, mp));
         root.addView(lowLayer, new FrameLayout.LayoutParams(mp, mp));
+        // Шар вікон Linux-програм: над столом і віджетами, під меню програм і доком.
+        linuxLayer = new FrameLayout(this);
+        linuxLayer.setClipToPadding(false); linuxLayer.setClipChildren(false);
+        root.addView(linuxLayer, new FrameLayout.LayoutParams(mp, mp));
         drawer.setVisibility(View.GONE);
         root.addView(drawer, new FrameLayout.LayoutParams(mp, mp));
         highLayer.addView(dock, new FrameLayout.LayoutParams(dockW, mp, Gravity.LEFT));
@@ -117,6 +121,7 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
                 Insets ime = in.getInsets(WindowInsets.Type.ime());
                 lowLayer.setPadding(s.left, s.top, s.right, s.bottom);
                 highLayer.setPadding(s.left, s.top, s.right, s.bottom);
+                linuxLayer.setPadding(s.left, s.top, s.right, s.bottom);
                 drawer.setSystemInsets(s.left, s.top, s.right, Math.max(s.bottom, ime.bottom));
                 return WindowInsets.CONSUMED;
             }
@@ -133,6 +138,14 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
 
         setContentView(root);
         root.requestApplyInsets();
+        linuxLayer.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override public void onLayoutChange(View v, int l, int t, int r, int b, int ol, int ot, int or, int ob) {
+                if (r - l != or - ol || b - t != ob - ot) com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.get().onScreenChanged();
+            }
+        });
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.get().attachLayer(linuxLayer, new com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.UsableProvider() {
+            @Override public android.graphics.Rect get() { return linuxUsable(); }
+        });
 
         IntentFilter f = new IntentFilter();
         f.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -203,9 +216,37 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
         desktop.reload();
         dock.reload();
         drawer.applyPrefs();
+        drawer.refresh();   // нові/видалені Linux-програми
         applySide();
         DockOverlayService.sync(this);
         DockOverlayService.setSuppressed(true);
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm wm = com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.get();
+        wm.setHomeVisible(true);
+        wm.reloadPrefs();
+    }
+
+    /** Область для вікон Linux: шар без дока. */
+    private android.graphics.Rect linuxUsable() {
+        int pl = linuxLayer.getPaddingLeft(), pt = linuxLayer.getPaddingTop();
+        android.graphics.Rect u = new android.graphics.Rect(0, 0, Math.max(0, linuxLayer.getWidth() - pl - linuxLayer.getPaddingRight()),
+                Math.max(0, linuxLayer.getHeight() - pt - linuxLayer.getPaddingBottom()));
+        if (dock != null && dock.getVisibility() == View.VISIBLE && dock.getWidth() > 0) {
+            int side = DockSide.current(this), gap = Ui.dp(this, 2);
+            int dl = Math.round(dock.getX()) - highLayer.getPaddingLeft(), dt = Math.round(dock.getY()) - highLayer.getPaddingTop();
+            if (side == DockSide.LEFT) u.left = Math.max(u.left, dl + dock.getWidth() + gap);
+            else if (side == DockSide.RIGHT) u.right = Math.min(u.right, dl - gap);
+            else if (side == DockSide.TOP) u.top = Math.max(u.top, dt + dock.getHeight() + gap);
+            else u.bottom = Math.min(u.bottom, dt - gap);
+        }
+        return u;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(android.view.MotionEvent ev) {
+        // Дотик поза вікнами Linux (стіл, док, меню): жодне вікно не отримує клавіші.
+        if (ev.getActionMasked() == android.view.MotionEvent.ACTION_DOWN)
+            com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.get().onTouchOutside(ev.getRawX(), ev.getRawY());
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -225,6 +266,7 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
         widgets.exitEdit();
         wallpaper.pause();
         DockOverlayService.setSuppressed(false);
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.get().setHomeVisible(false);
     }
 
     @Override
@@ -256,6 +298,7 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
     @Override
     protected void onDestroy() {
         unregisterReceiver(pkgReceiver);
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.get().detachLayer();
         super.onDestroy();
     }
 
@@ -268,6 +311,8 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
         if (dockCtl != null) applySide();
         if (desktop != null) desktop.reload();
         if (widgets != null) widgets.reload();
+        if (linuxLayer != null) linuxLayer.post(new Runnable() { @Override public void run() {
+            com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.get().onScreenChanged(); } });
     }
 
     private void closeDrawer() { if (drawer.getVisibility() == View.VISIBLE) drawer.close(); }
@@ -313,6 +358,16 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
         return true;
     }
 
+    /** Для Android-програм — «Про програму»; для Linux — «Закрити» і «На весь екран» (якщо запущена). */
+    private void addInfoOrLinux(MiniMenu m, final AppEntry e) {
+        if (!e.linux) { m.add(I18n.t("menu_app_info"), new Runnable() { @Override public void run() { AppLauncher.openInfo(HomeActivity.this, e.pkg); } }); return; }
+        final com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm wm = com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.get();
+        if (wm.isRunning(e.key)) {
+            m.add(I18n.t("lw_close"), new Runnable() { @Override public void run() { wm.closeApp(e.key); } });
+            m.add(I18n.t("lw_maximize"), new Runnable() { @Override public void run() { wm.maximizeApp(e.key); } });
+        }
+    }
+
     /** Спільне контекстне меню для елемента дока або робочого столу (програма чи папка). */
     private void showKeyMenu(final String key, View anchor, int x, int y, final boolean fromDock, String removeLabel, final Runnable onRemove) {
         MiniMenu m = new MiniMenu(this);
@@ -340,7 +395,7 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
         } else {
             final AppEntry e = AppRepository.find(key);
             if (e != null) {
-                m.add(I18n.t("menu_app_info"), new Runnable() { @Override public void run() { AppLauncher.openInfo(HomeActivity.this, e.pkg); } });
+                addInfoOrLinux(m, e);
                 m.add(I18n.t("folder_add_to"), new Runnable() {
                     @Override public void run() {
                         FolderChooser.choose(HomeActivity.this, key, loc, new FolderChooser.Done() {
@@ -415,10 +470,9 @@ public class HomeActivity extends Activity implements DockView.Listener, DrawerV
     public void onMenu(final AppEntry e, View iconView) {
         int[] loc = new int[2];
         iconView.getLocationOnScreen(loc);
-        new MiniMenu(this)
-                .add(I18n.t("menu_app_info"), new Runnable() {
-                    @Override public void run() { AppLauncher.openInfo(HomeActivity.this, e.pkg); }
-                })
+        MiniMenu mm = new MiniMenu(this);
+        addInfoOrLinux(mm, e);
+        mm
                 .add(I18n.t("folder_add_to"), new Runnable() {
                     @Override public void run() {
                         FolderChooser.choose(HomeActivity.this, e.key, FolderStore.LOC_DRAWER, new FolderChooser.Done() {

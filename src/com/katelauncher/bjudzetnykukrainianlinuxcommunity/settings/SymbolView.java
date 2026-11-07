@@ -10,7 +10,7 @@ import android.view.View;
 /** Прості символічні іконки в стилі Yaru/Adwaita (малюються кодом, без ресурсів). */
 final class SymbolView extends View {
     static final int BACK = 1, CHEVRON_RIGHT = 2, CHEVRON_DOWN = 3, CHECK = 4,
-            PICTURE = 5, APPEARANCE = 6, DOCK = 7, DESKTOP = 8, GRID = 9, GEAR = 10, INFO = 11;
+            PICTURE = 5, APPEARANCE = 6, DOCK = 7, DESKTOP = 8, GRID = 9, GEAR = 10, INFO = 11, TERMINAL = 12;
 
     private final int type;
     private final Paint stroke = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -87,6 +87,12 @@ final class SymbolView extends View {
                     poly(c, 12 + cs * 7.4f, 12 + sn * 7.4f, 12 + cs * 9.8f, 12 + sn * 9.8f);
                 }
                 c.drawCircle(12, 12, 7.4f, stroke);
+                break;
+            case TERMINAL:
+                rect.set(3, 4.5f, 21, 19.5f);
+                c.drawRoundRect(rect, 2.5f, 2.5f, stroke);
+                poly(c, 7, 9.5f, 10.5f, 12, 7, 14.5f);
+                poly(c, 12.5f, 15, 17, 15);
                 break;
             case INFO:
                 c.drawCircle(12, 12, 9, stroke);

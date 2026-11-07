@@ -197,6 +197,7 @@ public class DockView extends View {
                 float x = horiz ? a + (slot - iconPx) / 2f : (w - iconPx) / 2f;
                 float y = horiz ? (h - iconPx) / 2f : a + (slot - iconPx) / 2f;
                 c.drawBitmap(b, x, y, bmpPaint);
+                drawRunning(c, keys.get(i), a);
             }
         }
         c.restore();
@@ -207,6 +208,37 @@ public class DockView extends View {
         float setA = settingsPos();
         if (pressed && hit == HIT_SETTINGS) highlight(c, setA);
         drawGear(c, cx(setA + slot / 2f), cy(setA + slot / 2f));
+    }
+
+    /** Позначка запущеної Linux-програми: 1–3 крапки біля зовнішнього краю дока. */
+    private void drawRunning(Canvas c, String key, float a) {
+        if (!com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.LinuxApps.isLinuxKey(key)) return;
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm wm = com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.get();
+        int n = wm == null ? 0 : Math.min(3, wm.windowCount(key));
+        if (n == 0) return;
+        float r = d(2.2f), gap = d(7f), mid = a + slot / 2f;
+        float edge = side == DockSide.RIGHT ? getWidth() - d(5) : side == DockSide.BOTTOM ? getHeight() - d(5) : d(5);
+        if (side == DockSide.TOP) edge = d(5);
+        fill.setColor(wm.isFocusedApp(key) ? com.katelauncher.bjudzetnykukrainianlinuxcommunity.core.Theme.ACCENT : 0xFFFFFFFF);
+        for (int k = 0; k < n; k++) {
+            float o = mid + (k - (n - 1) / 2f) * gap;
+            if (horiz) c.drawCircle(o, edge, r, fill); else c.drawCircle(edge, o, r, fill);
+        }
+        fill.setColor(0xFFFFFFFF);
+    }
+
+    private final Runnable linuxChanged = new Runnable() { @Override public void run() { invalidate(); } };
+
+    @Override protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm wm = com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.get();
+        if (wm != null) wm.addListener(linuxChanged);
+    }
+
+    @Override protected void onDetachedFromWindow() {
+        com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm wm = com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.get();
+        if (wm != null) wm.removeListener(linuxChanged);
+        super.onDetachedFromWindow();
     }
 
     private void highlight(Canvas c, float a) {
@@ -257,7 +289,10 @@ public class DockView extends View {
                 hit = hitTest(m);
                 pressed = hit != HIT_NONE;
                 invalidate();
-                if (hit >= 0) postDelayed(longPress, ViewConfiguration.getLongPressTimeout());
+                if (hit >= 0 && hit < keys.size() && (e.getButtonState() & MotionEvent.BUTTON_SECONDARY) != 0) {
+                    longFired = true;   // ПКМ миші = довге натискання (контекстне меню)
+                    invalidate();
+                } else if (hit >= 0) postDelayed(longPress, ViewConfiguration.getLongPressTimeout());
                 return true;
 
             case MotionEvent.ACTION_MOVE: {
@@ -332,7 +367,11 @@ public class DockView extends View {
                             else FolderPopup.show(getContext(), FolderStore.idOf(k), folderListener);
                         } else {
                             AppEntry app = AppRepository.find(k);
-                            if (app != null) AppLauncher.launch(getContext(), app);
+                            if (app != null) {
+                                com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm wm = com.katelauncher.bjudzetnykukrainianlinuxcommunity.linux.win.LinuxWm.get();
+                                if (app.linux && wm != null && wm.isRunning(app.key)) wm.toggleApp(app.key);
+                                else AppLauncher.launch(getContext(), app);
+                            }
                         }
                     }
                 }
