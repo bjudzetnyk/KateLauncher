@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Запуск Linux-програм через Termux (потрібен також allow-external-apps=true у termux.properties) -->
     <uses-permission android:name="com.termux.permission.RUN_COMMAND" />
 
@@ -22,7 +23,7 @@
     <application
         android:name=".core.App"
         android:icon="@drawable/ic_launcher"
-        android:label="KateLauncher0.8.0ExLE"
+        android:label="KateLauncher0.8.0-fix7"
         android:extractNativeLibs="false"
         android:theme="@style/SettingsTheme"
         android:allowBackup="false"
@@ -54,6 +55,12 @@
         <receiver android:name=".linux.wl.HostReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="com.katelauncher.bjudzetnykukrainianlinuxcommunity.WL_HOST" />
+            </intent-filter>
+        </receiver>
+        <!-- Тексти модулів верхньої панелі від сторонніх застосунків (див. bar/ExternalModules.java) -->
+        <receiver android:name=".bar.ExternalReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.katelauncher.bjudzetnykukrainianlinuxcommunity.BAR_SET" />
             </intent-filter>
         </receiver>
         <receiver android:name=".dock.BootReceiver" android:exported="true">
